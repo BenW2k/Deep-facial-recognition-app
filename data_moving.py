@@ -2,6 +2,7 @@ import os
 import secret
 
 lfw_path = os.path.join(secret.path_prefix, 'lfw')
+
 # Script to extract the images from the Labeled Faces in the Wild dataset and move them to the data/negative repository
 for directory in os.listdir(lfw_path):
     for file in os.listdir(os.path.join(lfw_path, directory)):
