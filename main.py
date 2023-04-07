@@ -59,3 +59,12 @@ cv2.destroyAllWindows()
 positive = tf.data.Dataset.list_files(POS_PATH + '\*.jpg').take(300)
 negative = tf.data.Dataset.list_files(NEG_PATH + '\*.jpg').take(300)
 anchor = tf.data.Dataset.list_files(ANCHOR_PATH + '\*.jpg').take(300)
+
+# Preprocessing
+
+def preprocess(file_path):
+    byte_img = tf.io.read_file(file_path) # Loads image from file path
+    img = tf.io.decode_jpeg(byte_img) # Decodes jpeg
+    img = tf.image.resize(img, (100,100)) # Resizing image to 100x100x3
+    img = img / 255.0 # Scaling image to be between 0 and 1
+    return img
