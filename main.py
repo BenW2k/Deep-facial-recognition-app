@@ -54,3 +54,8 @@ while cap.isOpened():
 # Closing the webcam frame
 cap.release()
 cv2.destroyAllWindows()
+
+# Variables grab all images from each directory
+positive = tf.data.Dataset.list_files(POS_PATH + '\*.jpg').take(300)
+negative = tf.data.Dataset.list_files(NEG_PATH + '\*.jpg').take(300)
+anchor = tf.data.Dataset.list_files(ANCHOR_PATH + '\*.jpg').take(300)
