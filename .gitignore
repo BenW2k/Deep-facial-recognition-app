@@ -153,6 +153,5 @@ cython_debug/
 
 # Additional
 secret.py
-lfw
 test.py
 negative
