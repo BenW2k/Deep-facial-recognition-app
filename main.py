@@ -46,3 +46,8 @@ data = positives.concatenate(negatives)
 # Creating the preprocess twin for test and train split
 def preprocess_twin(input_img, validation_img, label):
     return(preprocess(input_img), preprocess(validation_img), label)
+
+# Creating the dataloading pipeline
+data = data.map(preprocess_twin)
+data = data.cache()
+data = data.shuffle(buffer_size=1024)
