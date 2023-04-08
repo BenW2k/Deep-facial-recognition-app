@@ -155,3 +155,5 @@ cython_debug/
 secret.py
 test.py
 negative
+positive
+anchor
