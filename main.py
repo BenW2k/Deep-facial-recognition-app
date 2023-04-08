@@ -68,3 +68,9 @@ def preprocess(file_path):
     img = tf.image.resize(img, (100,100)) # Resizing image to 100x100x3
     img = img / 255.0 # Scaling image to be between 0 and 1
     return img
+
+# Creating labelled dataset
+
+positives = tf.data.Dataset.zip((anchor, positive, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
+negatives = tf.data.Dataset.zip((anchor, negative, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
+data = positives.concatenate(negatives)
