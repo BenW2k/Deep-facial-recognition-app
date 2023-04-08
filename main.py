@@ -51,3 +51,14 @@ def preprocess_twin(input_img, validation_img, label):
 data = data.map(preprocess_twin)
 data = data.cache()
 data = data.shuffle(buffer_size=1024)
+
+# Training split
+train_data = data.take(round(len(data)*.7))
+train_data = train_data.batch(16)
+train_data = train_data.prefetch(8)
+
+# Test split
+test_data = data.skip(round(len(data)*.7)) # To skip the 70% of the data that is used for training.
+test_data = test_data.take(round(len(data)*.3))
+test_data = test_data.batch(16)
+test_data = test_data.prefetch(8)
