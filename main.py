@@ -74,3 +74,7 @@ def preprocess(file_path):
 positives = tf.data.Dataset.zip((anchor, positive, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
 negatives = tf.data.Dataset.zip((anchor, negative, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
 data = positives.concatenate(negatives)
+
+# Creating the preprocess twin for test and train split
+def preprocess_twin(input_img, validation_img, label):
+    return(preprocess(input_img), preprocess(validation_img), label)
