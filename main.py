@@ -65,6 +65,26 @@ test_data = test_data.prefetch(8)
 
 def create_embedding():
     inp = Input(shape=(100,100,3), name = 'input_image')
-    c1 = Conv2D(64, (10,10), activation='relu')(inp) # Convolutional layer, 64
 
-# return Model(inputs=, outputs=, name=,)
+    # Block One
+    c1 = Conv2D(64, (10,10), activation='relu')(inp) # Convolutional layer, 64
+    m1 = MaxPooling2D(64, (2,2), padding='same')(c1) # MaxPooling layer
+
+    # Block Two
+    c2 = Conv2D(128, (7,7), activation='relu')(m1)
+    m2 = MaxPooling2D(64, (2,2), padding='same')(c2)
+
+    # Block 3
+
+    c3 = Conv2D(128, (4,4), activation='relu')(m2)
+    m3 = MaxPooling2D(64, (2,2), padding='same')(c3)
+
+    # Block 4
+
+    c4 = Conv2D(256, (4,4), activation='relu')(m3)
+    f1 = Flatten()(c4) # Flattens the 3 dimensional ouput of the convolutions into a single dimension
+    d1 = Dense(4096, activation='sigmoid')(f1) # Condenses output of f1 
+
+
+
+    return Model(inputs=[inp], outputs=[d1], name='embedding')
