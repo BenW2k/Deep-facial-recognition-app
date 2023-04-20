@@ -74,13 +74,11 @@ def create_embedding():
     c2 = Conv2D(128, (7,7), activation='relu')(m1)
     m2 = MaxPooling2D(64, (2,2), padding='same')(c2)
 
-    # Block 3
-
+    # Block Three
     c3 = Conv2D(128, (4,4), activation='relu')(m2)
     m3 = MaxPooling2D(64, (2,2), padding='same')(c3)
 
-    # Block 4
-
+    # Block Four
     c4 = Conv2D(256, (4,4), activation='relu')(m3)
     f1 = Flatten()(c4) # Flattens the 3 dimensional ouput of the convolutions into a single dimension
     d1 = Dense(4096, activation='sigmoid')(f1) # Condenses output of f1 
@@ -88,3 +86,11 @@ def create_embedding():
 
 
     return Model(inputs=[inp], outputs=[d1], name='embedding')
+
+class L1Dist(Layer): # New class for L1 distance layer
+    def __init__(self, **kwargs ): # passing in **kwargs to allow us to pass in a variable number of arguments into the function
+        super().__init__() # For inheritance from parent class
+
+    #Similarity Calculation
+    def call(self, input_embedding, validation_embedding,):
+        return tf.math.abs(input_embedding - validation_embedding)
