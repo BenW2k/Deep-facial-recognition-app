@@ -87,6 +87,8 @@ def create_embedding():
 
     return Model(inputs=[inp], outputs=[d1], name='embedding')
 
+embedding = create_embedding()
+
 class L1Dist(Layer): # New class for L1 distance layer
     def __init__(self, **kwargs ): # passing in **kwargs to allow us to pass in a variable number of arguments into the function
         super().__init__() # For inheritance from parent class
@@ -94,3 +96,24 @@ class L1Dist(Layer): # New class for L1 distance layer
     #Similarity Calculation
     def call(self, input_embedding, validation_embedding,):
         return tf.math.abs(input_embedding - validation_embedding)
+
+
+def Siamese_model_creation():
+
+    # Input handling
+    
+    #Input image in the model
+    input_image = Input(name='input_img', shape=(100,100,3))
+
+    # Validation image in the model
+    validation_image = Input(name='validation_img', shape=(100,100,3))
+
+    # Combine siamese distance components
+    siamese_layer = L1Dist()
+    siamese_layer._name = 'distance'
+    distances = siamese_layer(embedding(input_image), embedding(validation_image))
+
+    # Classification layer
+    classifier = Dense(1, activation='sigmoid')(distances)
+
+    return Model(inputs=[input_image, validation_image], outputs=classifier, name='SiameseNetwork')
