@@ -30,3 +30,23 @@ checkpoint_dir = os.path.join(secret.path_prefix, 'training_checkpoints') # Crea
 checkpoint_prefix = os.path.join(checkpoint_dir, 'ckpt')
 checkpoint = tf.train.Checkpoint(opt=opt, siamese_model=siamese_model)
 
+# Train step creation
+@tf.function # Decorator to compile the training function more effectively
+def train_step(batch):
+
+    with tf.GradientTape() as tape:
+        # Get anchor and positive/negative image
+        X = batch[:2]
+        # Get label
+        y = batch[2]
+
+        # Forward pass
+        yhat = siamese_model(X, training=True)
+        # Loss calculation
+        loss = binary_cross_loss(y, yhat)
+    
+    # Gradient Calculation
+    grad = tape.gradient(loss, siamese_model.trainable_variables)
+
+    # Updated weights calculation and application to siamese model
+    opt.apply_gradients(zip(grad, siamese_model.trainable_variables)) # Calculating the new weights using the Adam optimisation model
