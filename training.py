@@ -50,3 +50,17 @@ def train_step(batch):
 
     # Updated weights calculation and application to siamese model
     opt.apply_gradients(zip(grad, siamese_model.trainable_variables)) # Calculating the new weights using the Adam optimisation model
+
+def train(data, EPOCHS):
+    # Looping through epochs
+    for epoch in range(1, EPOCHS+1):
+        print(f"\n Epoch {epoch}/{EPOCHS}")
+        progbar = tf.keras.utils.Progbar(len(model.train_data))
+    # Looping through each batch
+        for idx, batch in enumerate(model.train_data):
+            train_step(batch)
+            progbar.update(idx+1)
+        if epoch % 10 == 0:
+            checkpoint.save(file_prefix=checkpoint_prefix)
+
+    
