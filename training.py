@@ -13,7 +13,9 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.models import Model
 from keras.layers import Layer, Conv2D, Dense, MaxPooling2D, Input, Flatten
+from keras.metrics import Precision, Recall
 
+EPOCHS = 20
 siamese_model = model.Siamese_model_creation()
 
 # Setting GPU Memory Consumption Growth to avoid 'Out of memory' errors
@@ -22,7 +24,7 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 # Loss setup and optimisation
-binary_cross_loss = tf.losses.binary_crossentropy()
+binary_cross_loss = tf.losses.BinaryCrossentropy()
 opt = tf.keras.optimizers.Adam(1e-4) # 1e-4 denotes a learning rate of 0.0001
 
 # Checkpoint creation
@@ -55,12 +57,14 @@ def train(data, EPOCHS):
     # Looping through epochs
     for epoch in range(1, EPOCHS+1):
         print(f"\n Epoch {epoch}/{EPOCHS}")
-        progbar = tf.keras.utils.Progbar(len(model.train_data))
+        progbar = tf.keras.utils.Progbar(len(data))
     # Looping through each batch
-        for idx, batch in enumerate(model.train_data):
+        for idx, batch in enumerate(data):
             train_step(batch)
             progbar.update(idx+1)
         if epoch % 10 == 0:
             checkpoint.save(file_prefix=checkpoint_prefix)
+
+train(model.train_data, EPOCHS)
 
     
