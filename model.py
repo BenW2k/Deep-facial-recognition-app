@@ -40,7 +40,7 @@ def preprocess(file_path):
 # Creating labelled dataset
 
 positives = tf.data.Dataset.zip((anchor, positive, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
-negatives = tf.data.Dataset.zip((anchor, negative, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
+negatives = tf.data.Dataset.zip((anchor, negative, tf.data.Dataset.from_tensor_slices(tf.zeros(len(anchor)))))
 data = positives.concatenate(negatives)
 
 # Creating the preprocess twin for test and train split
@@ -50,7 +50,7 @@ def preprocess_twin(input_img, validation_img, label):
 # Creating the dataloading pipeline
 data = data.map(preprocess_twin)
 data = data.cache()
-data = data.shuffle(buffer_size=1024)
+data = data.shuffle(buffer_size=10000)
 
 # Training split
 train_data = data.take(round(len(data)*.7))
@@ -94,11 +94,11 @@ class L1Dist(Layer): # New class for L1 distance layer
         super().__init__() # For inheritance from parent class
 
     #Similarity Calculation
-    def call(self, input_embedding, validation_embedding,):
+    def call(self, input_embedding, validation_embedding):
         return tf.math.abs(input_embedding - validation_embedding)
 
 
-def Siamese_model_creation():
+def siamese_model_creation():
 
     # Input handling
     
@@ -108,12 +108,18 @@ def Siamese_model_creation():
     # Validation image in the model
     validation_image = Input(name='validation_img', shape=(100,100,3))
 
+    inp_embedding = embedding(input_image)
+    val_embedding = embedding(validation_image)
+
+
     # Combine siamese distance components
     siamese_layer = L1Dist()
     siamese_layer._name = 'distance'
-    distances = siamese_layer(embedding(input_image), embedding(validation_image))
+    distances = siamese_layer(inp_embedding, val_embedding)
 
     # Classification layer
     classifier = Dense(1, activation='sigmoid')(distances)
 
     return Model(inputs=[input_image, validation_image], outputs=classifier, name='SiameseNetwork')
+
+siamese_model = siamese_model_creation()
