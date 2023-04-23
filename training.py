@@ -16,7 +16,7 @@ from keras.layers import Layer, Conv2D, Dense, MaxPooling2D, Input, Flatten
 from keras.metrics import Precision, Recall
 
 EPOCHS = 20
-siamese_model = model.Siamese_model_creation()
+siamese_model = model.siamese_model_creation()
 
 # Setting GPU Memory Consumption Growth to avoid 'Out of memory' errors
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -54,14 +54,24 @@ def train_step(batch):
     opt.apply_gradients(zip(grad, siamese_model.trainable_variables)) # Calculating the new weights using the Adam optimisation model
 
 def train(data, EPOCHS):
+    
+    
     # Looping through epochs
     for epoch in range(1, EPOCHS+1):
         print(f"\n Epoch {epoch}/{EPOCHS}")
         progbar = tf.keras.utils.Progbar(len(data))
+
+    # Creating metric object
+        r = Recall()
+        p = Precision()
     # Looping through each batch
         for idx, batch in enumerate(data):
-            train_step(batch)
+            loss = train_step(batch)
+            yhat = siamese_model.predict(batch[:2])
+            r.update_state(batch[2], yhat)
+            p.update_state(batch[2], yhat) 
             progbar.update(idx+1)
+        print(loss.numpy(), r.result().numpy(), p.result().numpy())
         if epoch % 10 == 0:
             checkpoint.save(file_prefix=checkpoint_prefix)
 
