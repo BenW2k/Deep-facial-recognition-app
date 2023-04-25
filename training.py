@@ -61,20 +61,25 @@ def train(data, EPOCHS):
         print(f"\n Epoch {epoch}/{EPOCHS}")
         progbar = tf.keras.utils.Progbar(len(data))
 
-    # Creating metric object
-        r = Recall()
-        p = Precision()
+        r= Recall()
+        p= Precision()
+
     # Looping through each batch
+        # Run train step here
         for idx, batch in enumerate(data):
+        # Run train step here
             loss = train_step(batch)
             yhat = siamese_model.predict(batch[:2])
             r.update_state(batch[2], yhat)
-            p.update_state(batch[2], yhat) 
+            p.update_state(batch[2], yhat)
             progbar.update(idx+1)
-        print(loss.numpy(), r.result().numpy(), p.result().numpy())
+        print(r.result().numpy(), p.result().numpy())
+        
+        # Save checkpoints
         if epoch % 10 == 0:
             checkpoint.save(file_prefix=checkpoint_prefix)
 
 train(model.train_data, EPOCHS)
+siamese_model.save('siamese_model.h5')
 
     
