@@ -79,7 +79,9 @@ def train(data, EPOCHS):
         if epoch % 10 == 0:
             checkpoint.save(file_prefix=checkpoint_prefix)
 
+# Runs training function
 train(model.train_data, EPOCHS)
+# Saves trained model in project folder
 siamese_model.save('siamese_model.h5')
 
     
