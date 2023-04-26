@@ -158,3 +158,4 @@ negative
 positive
 anchor
 training_checkpoints
+siamese_model.h5
