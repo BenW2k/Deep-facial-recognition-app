@@ -159,3 +159,5 @@ positive
 anchor
 training_checkpoints
 siamese_model.h5
+verification_image
+input_image
