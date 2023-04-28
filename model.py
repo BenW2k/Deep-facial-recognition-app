@@ -64,7 +64,7 @@ test_data = test_data.batch(16)
 test_data = test_data.prefetch(8)
 
 def create_embedding():
-    inp = Input(shape=(100,100,3), name = 'input_image')
+    inp = Input(shape=(100,100,3), name ='input_image')
 
     # Block One
     c1 = Conv2D(64, (10,10), activation='relu')(inp) # Convolutional layer, 64
