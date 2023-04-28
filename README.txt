@@ -6,3 +6,4 @@ random
 NumPy - version 1.22.3
 matplotlib - version 3.5.1
 tensorflow - version 2.10.1
+Kivy - version 2.1.0
