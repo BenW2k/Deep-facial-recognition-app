@@ -2,9 +2,7 @@
 import secret
 import cv2
 import os
-import random
 import numpy as np
-import uuid
 import model as md
 from matplotlib import pyplot as plt
 

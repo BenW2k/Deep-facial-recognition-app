@@ -1,10 +1,10 @@
 # Import General Dependencies
 import secret
-import cv2
 import os
-import random
 import numpy as np
+import random
 import uuid
+import cv2
 from matplotlib import pyplot as plt
 
 # Import TensorFlow Dependencies
@@ -27,7 +27,7 @@ ANCHOR_PATH = os.path.join(secret.path_prefix, 'data', 'anchor')
 positive = tf.data.Dataset.list_files(POS_PATH + '\*.jpg').take(300)
 negative = tf.data.Dataset.list_files(NEG_PATH + '\*.jpg').take(300)
 anchor = tf.data.Dataset.list_files(ANCHOR_PATH + '\*.jpg').take(300)
-
+    
 # Preprocessing
 
 def preprocess(file_path):
@@ -38,7 +38,6 @@ def preprocess(file_path):
     return img
 
 # Creating labelled dataset
-
 positives = tf.data.Dataset.zip((anchor, positive, tf.data.Dataset.from_tensor_slices(tf.ones(len(anchor)))))
 negatives = tf.data.Dataset.zip((anchor, negative, tf.data.Dataset.from_tensor_slices(tf.zeros(len(anchor)))))
 data = positives.concatenate(negatives)
@@ -62,6 +61,8 @@ test_data = data.skip(round(len(data)*.7)) # To skip the 70% of the data that is
 test_data = test_data.take(round(len(data)*.3))
 test_data = test_data.batch(16)
 test_data = test_data.prefetch(8)
+
+
 
 def create_embedding():
     inp = Input(shape=(100,100,3), name ='input_image')
