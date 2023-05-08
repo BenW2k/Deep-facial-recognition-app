@@ -2,20 +2,9 @@ import tensorflow as tf
 import numpy as np
 import os
 
-
-''' def data_aug(img):
-    data = []
-    for i in range(9):
-        img = tf.image.stateless_random_brightness(img, max_delta=0.02, seed=(1,2))
-        img = tf.image.stateless_random_contrast(img, lower=0.6, seed=(1,3))
-        img = tf.image.stateless_random_flip_left_right(img, seed=(np.random.randint(100), np.random.randint(100)))
-        img = tf.image.stateless_random_jpeg_quality(img, min_jpeg_quality=90, max_jpeg_quality=100, seed=(np.random.randint(100), np.random.randint(100)))
-        img = tf.image.stateless_random_saturation(img, lower=0.9, upper=1, seed=(np.random.randint(100), np.random.randint(100)))
-
-        data.append '''
-person = 'rihanna'
-input_folder = fr'C:\Users\Ben\Documents\Resume projects\Deep facial recognition app\data\positive\{person}'
-output = fr'C:\Users\Ben\Documents\Resume projects\Deep facial recognition app\data\positive\{person}_aug'
+person = ' '
+input_folder = fr''
+output = fr''
 
 def augment_images(input_folder, output_folder):
     if not os.path.exists(output_folder):
@@ -45,17 +34,18 @@ def augment_images(input_folder, output_folder):
                 img_aug = tf.image.encode_jpeg(img_aug, quality=100)
                 tf.io.write_file(output_path, img_aug)
 
-augment_images(input_folder, output)
+# augment_images(input_folder, output)
 
 def rename_images(folder_path, number):
     counter = number
     for filename in os.listdir(folder_path):
         if filename.endswith('.jpg'):
             old_path = os.path.join(folder_path, filename)
-            new_filename = f'{person}{counter}.jpg'
+            # new_filename = f'{person}{counter}.jpg'
+            new_filename = f'{filename}_aug'
             new_path = os.path.join(folder_path, new_filename)
             os.rename(old_path, new_path)
             counter += 1
 
-rename_images(input_folder, 0)
-rename_images(output, 4)
+# rename_images(input_folder, 0)
+# rename_images(output, 4)
